@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="Tomislav Murat" name="author">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
+    <meta content="Do you need an Umbrella today?!" name="description">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fJbcDleC_YBsWjOby9Rr06w_Sj7kzQE&libraries=places"></script>
+    <title>Umbrella APP</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+
+    <!-- CSS PART  -->
+    <link charset="utf-8" href="css/style.css" media="screen" rel="stylesheet"
+    title="no title" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Rakkas" rel=
+    "stylesheet">
+</head>
+<body>
+    <section id="naslov">
+        <div>
+            <center>
+                UMBRELLA APP <br> <img alt="umbrella-logo" height="100" src=
+                "img/umbrella-rain-512.png" width="100">
+            </center>
+        </div>
+    </section>
+    <form id="form" method="post" name="form">
+        
+        <p> <label for="imegrada">Unesite lokaciju:<img alt="location-logo" height="30" src="img/04_maps.png" width="30"></label> <input id="term" name=
+        "imegrada" type="text">
+        </p>
+        <p><input id="submit" type="submit" value="PROVJERA"></p>
+    </form>
+    <section id="poster1"></section>
+    <section id="poster"></section>
+    <div class="back" id="backbutton"></div>
+
+    <!-- SCRIPTS PART  -->
+    <!--jQuery, linked from a CDN-->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+    
+    <!-- AUTOCOMPLETE SKRIPTA -->    
+   <script>
+   function init() {
+                var input = document.getElementById('term');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            }
+  
+            google.maps.event.addDomListener(window, 'load', init);
+    </script>
+</body>
+</html>
