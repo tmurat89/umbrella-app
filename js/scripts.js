@@ -23,12 +23,12 @@ $(document).ready(function() {
             //If the input field was empty, display a message
             $("#poster").show();
             $('#poster').html(
-                "<h2 class='loading'>Ha! Niste nista unjeli u formu!</h2>"
+                "<h2 class='loading'>Error! Please enter your location in the form</h2>"
             );
         } else {
             //They must have entered a value, carry on with API call, first display a loading message to notify the user of activity
             $('#poster').html(
-                "<h2 class='loading'>Provjeravamo vrijeme!</h2>"
+                "<h2 class='loading'>Checking weather!</h2>"
             );
             $.getJSON(
                 "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22" +
@@ -38,7 +38,7 @@ $(document).ready(function() {
                     if (json.query.results === null) {
                         //       console.log(json.query.results);
                         return $('#poster').append(
-                            "<h2>Unio si mjesto koje ne postoji!</h2>"
+                            "<h2>Entered location was not found!</h2>"
                         );
                     } else {
                         var provLow = json.query.results.channel
@@ -55,16 +55,16 @@ $(document).ready(function() {
                             .item.title;
                         console.log(check);
                         var standardniIspisHeader =
-                            "<label> Lokacija: " + lokacija +
+                            "<label> Location: " + lokacija +
                             "</label>" +
-                            "<label> Prikazuje se prognoza za datum: <br> <strong>" +
+                            "<label> Showing forecast for the date: <br> <strong>" +
                             datum + "</strong></label>" +
-                            "<label> Danas će vrijeme biti: " +
+                            "<label> The weather today is going to be: " +
                             "<strong>" + provLow + "</strong>" +
                             "</label>" +
-                            "<label> Min temperatura: " +
+                            "<label> Min temperature: " +
                             tempMin + " C </label>" + "<br>" +
-                            "<label> Max temperatura: " +
+                            "<label> Max temperature: " +
                             tempMax + " C </label>";
                     }
                     for (i = 0; i < vrijemeKodovi.length; i++) {
@@ -73,7 +73,7 @@ $(document).ready(function() {
                             $('#poster1').html(
                                 standardniIspisHeader);
                             $('#poster').html(
-                                "<h2>Izgleda da ti danas NE TREBA kišobran!</h2> <img src=img/umbrella_off.png alt=\"UMBRELLA DONT NEED\" height=\"300\" width=\"300\"> " +
+                                "<h2>You DON't NEED an Umbrella today!</h2> <img src=img/umbrella_off.png alt=\"UMBRELLA DONT NEED\" height=\"300\" width=\"300\"> " +
                                 "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center>"
                             );
 
@@ -90,8 +90,8 @@ $(document).ready(function() {
                         $('#poster1').html(
                             standardniIspisHeader);
                         $('#poster').html(
-                            "<h2>Ponesi kišobran TREBAT će ti danas!</h2> <img src=img/umbrella_on.png alt=\"UMBRELLA NEED\" height=\"300\" width=\"300\"> " +
-                            "<button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button>"
+                            "<h2>You are going to NEED an Umbrella today!</h2> <img src=img/umbrella_on.png alt=\"UMBRELLA NEED\" height=\"300\" width=\"300\"> " +
+                            "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center"
                         );
 
                         $('form').hide();
