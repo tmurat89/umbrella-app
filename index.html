@@ -8,33 +8,26 @@
     <meta name="description" content="Simple app - Check if you really need to bring your umbrella with you today!">
     <meta name="keywords" content="umbrella app,umbrella-app,weather info, umbrella, do i need umbrella today">
     
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-84273021-1', 'auto');
-    ga('send', 'pageview');
-
-    </script>
-    
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9fJbcDleC_YBsWjOby9Rr06w_Sj7kzQE&libraries=places"></script>
     <title>Umbrella APP - Do i need an umbrella today?</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">  
 
+
+    
 
     <!-- CSS PART  -->
-    <link href="https://fonts.googleapis.com/css?family=Rakkas" rel=
-    "stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rakkas" rel=stylesheet>
+
+
 </head>
 <body>
+    
     <section id="naslov">
         <div>
             <center>
-                UMBRELLA APP <br> <img alt="umbrella-logo" height="100" src=
+                UMBRELLA APP" <br> <img alt="umbrella-logo" height="100" src=
                 "img/umbrella-rain-512.png" width="100">
             <h1> Do I need an umbrella today?</h1>
             </center>
@@ -42,31 +35,50 @@
     </section>
     <form id="form" method="post" name="form">
         
-        <p> <label for="imegrada">Example: Zagreb, HRV <img alt="location-logo" height="30" src="img/04_maps.png" width="30"></label> <input id="term" name=
-        "imegrada" type="text" placeholder="Enter your location">
+        <div id='printoutPanel'></div>
+        <div id='lat'></div>
+        <div id='lon'></div>
+
+        <p> 
+          
+            <!-- <input id="searchBox" type="text" placeholder="Enter your location">
+            <div id="searchResult" class="ui-widget" style="margin-top: 1em;"> </div> -->
+            <div id='searchBoxContainer'>
+
+            <input type= 'text' id= 'searchBox'/>
+            
+            </div>
+            <label for="imegrada">Example: Zagreb, HRV <img alt="location-logo" height="30" src="img/04_maps.png" width="30"></label> 
+
         </p>
         <p><input id="submit" type="submit" value="CHECK"></p>
     </form>
     <section id="poster1"></section>
     <section id="poster"></section>
-    <div class="back" id="backbutton"></div>
+    <div class="back" id=backbutton></div>
+
+
+
+        
+
+
 
     <!-- SCRIPTS PART  -->
     <!--jQuery, linked from a CDN-->
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>    
     <script src="js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=Ak-Iv5AW92XurXyuD9L78HFr_fjH1BPSZTnz5M-Gim_vVLZ3qtJfFcwzwdoFYk7k&callback=loadMapScenario' async defer></script>
     <script src="js/scripts.js"></script>
-    
+
     <!-- AUTOCOMPLETE SKRIPTA -->    
-   <script>
+<!--    <script>
    function init() {
                 var input = document.getElementById('term');
                 var autocomplete = new google.maps.places.Autocomplete(input);
             }
   
             google.maps.event.addDomListener(window, 'load', init);
-    </script>
+    </script> -->
 </body>
 </html>

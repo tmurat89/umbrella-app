@@ -1,119 +1,252 @@
-$(document).ready(function() {
+function loadMapScenario() {
+    Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', {
+        callback: onLoad,
+        errorCallback: onError
+    });
+    function onLoad() {
+        var options = { maxResults: 5 };
+        var manager = new Microsoft.Maps.AutosuggestManager(options);
+        manager.attachAutosuggest('#searchBox', '#searchBoxContainer', selectedSuggestion);
+    }
+    
+    function onError(message) {
+        document.getElementById('printoutPanel').innerHTML = message;
+    }
+    function selectedSuggestion(suggestionResult) {
+        var lat1=suggestionResult.location.latitude;
+        var lon1=suggestionResult.location.longitude;
+        document.getElementById('printoutPanel').innerHTML =    
+        'Suggestion: ' + suggestionResult.formattedSuggestion;
+        document.getElementById('lat').innerHTML = suggestionResult.location.latitude;
+        document.getElementById('lon').innerHTML = suggestionResult.location.longitude;
+
+
+    } 
+}
+
     $("#poster1").hide();
     $("#poster").hide();
     $(".back").hide();
 
+
+
     //function definition
-    var dohvatiVrijeme = function() {
+    var dohvatiVrijeme = function(latitude, longitude) {
         //Grab the weather and store it in the variable
-        var weatherTown = $('#term').val();
 
         // var weatherCity = $('#term2').val();
+        
+        var vidi=latitude;
+        console.log(vidi);
+        var vidi2=longitude;
+        console.log(vidi2);
+        var polje = $("#searchBox").val();
+        console.log(polje);
 
-        var vrijemeKodovi = ['19', '20', '21', '22', '24', '25',
-            '26', '29', '30', '31', '32', '33', '34', '36',
-            '44'
+        var vrijemeKodovi = ['800', '801', '802', '803', '701', '711',
+            '721', '731', '741', '751', '761', '762', '771', '781'
         ];
         var provjera = false;
         //     console.log(weatherCity);
         //    console.log(weatherTown);
 
         //Check if the user has entered anything
-        if (!weatherTown) {
+        if (!vidi && !polje) { 
             //If the input field was empty, display a message
             $("#poster").show();
             $('#poster').html(
                 "<h2 class='loading'>Error! Please enter your location in the form</h2>"
             );
-        } else {
-            //They must have entered a value, carry on with API call, first display a loading message to notify the user of activity
-            $('#poster').html(
-                "<h2 class='loading'>Checking weather!</h2>"
-            );
-            $.getJSON(
-                "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22" +
-                weatherTown + 
-                "%22)%20and%20u%3D'c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys",
-                function(json) {
-                    if (json.query.results === null) {
-                        //       console.log(json.query.results);
-                        return $('#poster').append(
-                            "<h2>Entered location was not found!</h2>"
-                        );
-                    } else {
-                        var provLow = json.query.results.channel
-                            .item.forecast[0].text;
-                        var check = json.query.results.channel.item
-                            .forecast[0].code;
-                        var tempMin = json.query.results.channel
-                            .item.forecast[0].low;
-                        var tempMax = json.query.results.channel
-                            .item.forecast[0].high;
-                        var datum = json.query.results.channel.item
-                            .forecast[0].date;
-                        var lokacija = json.query.results.channel
-                            .item.title;
-                        console.log(check);
-                        var standardniIspisHeader =
-                            "<label> Location: " + lokacija +
-                            "</label>" +
-                            "<label> Showing forecast for the date: <br> <strong>" +
-                            datum + "</strong></label>" +
-                            "<label> The weather today is going to be: " +
-                            "<strong>" + provLow + "</strong>" +
-                            "</label>" +
-                            "<label> Min temperature: " +
-                            tempMin + " C </label>" + "<br>" +
-                            "<label> Max temperature: " +
-                            tempMax + " C </label>";
-                    }
-                    for (i = 0; i < vrijemeKodovi.length; i++) {
-                        if (check === vrijemeKodovi[i]) {
-                            console.log("USPJESNO");
-                            $('#poster1').html(
-                                standardniIspisHeader);
-                            $('#poster').html(
-                                "<h2>You DON't NEED an Umbrella today!</h2> <img src=img/umbrella_off.png alt=\"UMBRELLA DONT NEED\" height=\"300\" width=\"300\"> " +
-                                "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center>"
-                            );
+        } 
+        
+        if (vidi) {
+        //They must have entered a value, carry on with API call, first display a loading message to notify the user of activity
+        $('#poster').html(
+            "<h2 class='loading'>Checking weather!</h2>"
+        );
+        var upit="https://api.openweathermap.org/data/2.5/onecall?lat="+vidi+"&lon="+vidi2+"&units=metric&exclude=current,minutely,hourly&appid=a05dc12322a6edace852c861084872a3"
+        
+        $.getJSON(String(upit),function(json) {
+                if (json.query === null) {
+                           console.log(json.query);
+                    return $('#poster').append(
+                        "<h2>Entered location was not found!</h2>"
+                    );
+                } else {
+                    var chec=json.daily[0].weather[0].main
+                    console.log(chec);
 
-                            $('form').hide();
-                            $('#naslov').hide();
-                            $("#poster1").slideToggle("slow");
-                            $("#poster").slideToggle("slow");
-                            $(".back").show();
-                            provjera = true;
-                            break;
-                        }
-                    }
-                    if (provjera === false) {
+                    var provLow = json.daily[0].weather[0].main;
+                    var opis = json.daily[0].weather[0].description;
+                    var check = String(json.daily[0].weather[0].id);
+                    
+                    var tempMin = json.daily[0].temp.min;
+                    var tempMax = json.daily[0].temp.max;
+                    
+                    var today = new Date();
+                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+               //     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    var dateTime = date;
+
+
+                    var lokacija = json.timezone;
+                    
+                    console.log(check);
+                    var standardniIspisHeader =
+                        "<label> Location: " + lokacija +
+                        "</label>"+ "<br>" +
+                        "<label> Showing forecast for the date: <br> <strong>" +
+                        dateTime + "</strong></label>" +
+                        "<label> The weather today is going to be: " +
+                        "<strong>" + provLow + "</strong>" +
+                        "</label>" +
+                        "<label> Description: " +
+                        "<strong>" + opis + "</strong>" +
+                        "</label>" +"<br>" +
+                        "<label> Min temperature: " +
+                        tempMin + " C </label>" + "<br>" +
+                        "<label> Max temperature: " +
+                        tempMax + " C </label>";
+                }
+                for (i = 0; i < vrijemeKodovi.length; i++) {
+                    if (check === vrijemeKodovi[i]) {
+                        console.log("USPJESNO");
                         $('#poster1').html(
                             standardniIspisHeader);
                         $('#poster').html(
-                            "<h2>You are going to NEED an Umbrella today!</h2> <img src=img/umbrella_on.png alt=\"UMBRELLA NEED\" height=\"300\" width=\"300\"> " +
-                            "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center"
+                            "<h2>You DON't NEED an Umbrella today!</h2> <img src=img/umbrella_off.png alt=\"UMBRELLA DONT NEED\" height=\"300\" width=\"300\"> " +
+                            "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center>"
                         );
 
                         $('form').hide();
                         $('#naslov').hide();
                         $("#poster1").slideToggle("slow");
                         $("#poster").slideToggle("slow");
-                        $(".back").slideToggle("slow");
+                        $(".back").show();
+                        provjera = true;
+                        break;
                     }
-                })
-        };
+                }
+                if (provjera === false) {
+                    $('#poster1').html(
+                        standardniIspisHeader);
+                    $('#poster').html(
+                        "<h2>You are going to NEED an Umbrella today!</h2> <img src=img/umbrella_on.png alt=\"UMBRELLA NEED\" height=\"300\" width=\"300\"> " +
+                        "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center"
+                    );
+
+                    $('form').hide();
+                    $('#naslov').hide();
+                    $("#poster1").slideToggle("slow");
+                    $("#poster").slideToggle("slow");
+                    $(".back").slideToggle("slow");
+                }
+            })
+        
+        } 
+
+        
+        else {
+             //They must have entered a value, carry on with API call, first display a loading message to notify the user of activity
+             $('#poster').html(
+                "<h2 class='loading'>Checking weather!</h2>"
+            );
+            var upit2="https://api.openweathermap.org/data/2.5/weather?q="+polje+"&units=metric&exclude=current,minutely,hourly&appid=a05dc12322a6edace852c861084872a3"
+            
+            $.getJSON(String(upit2),function(json) {
+                if (json.query === null) {
+                           console.log(json.query);
+                    return $('#poster').append(
+                        "<h2>Entered location was not found!</h2>"
+                    );
+                } else {
+                    var chec=json.weather[0].main
+                    console.log(chec);
+
+                    var provLow = json.weather[0].main;
+                    var opis = json.weather[0].description;
+                    var check = String(json.weather[0].id);
+                    
+                    var tempMin = json.main.temp_min;
+                    var tempMax = json.main.temp_max;
+                    
+                    var today = new Date();
+                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    var dateTime = date;
+
+
+                    var lokacija = json.name;
+                    var drzava=json.sys.country;
+                    
+                    console.log(check);
+                    var standardniIspisHeader =
+                        "<label> Location: " + lokacija + " ," + drzava +
+                        "</label>"+ "<br>" +
+                        "<label> Showing forecast for the date: <br> <strong>" +
+                        dateTime + "</strong></label>" +
+                        "<label> The weather today is going to be: " +
+                        "<strong>" + provLow + "</strong>" +
+                        "</label>" +
+                        "<label> Description: " +
+                        "<strong>" + opis + "</strong>" +
+                        "</label>" +"<br>" +
+                        "<label> Min temperature: " +
+                        tempMin + " C </label>" + "<br>" +
+                        "<label> Max temperature: " +
+                        tempMax + " C </label>";
+                }
+                for (i = 0; i < vrijemeKodovi.length; i++) {
+                    if (check === vrijemeKodovi[i]) {
+                        console.log("USPJESNO");
+                        $('#poster1').html(
+                            standardniIspisHeader);
+                        $('#poster').html(
+                            "<h2>You DON't NEED an Umbrella today!</h2> <img src=img/umbrella_off.png alt=\"UMBRELLA DONT NEED\" height=\"300\" width=\"300\"> " +
+                            "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center>"
+                        );
+
+                        $('form').hide();
+                        $('#naslov').hide();
+                        $("#poster1").slideToggle("slow");
+                        $("#poster").slideToggle("slow");
+                        $(".back").show();
+                        provjera = true;
+                        break;
+                    }
+                }
+                if (provjera === false) {
+                    $('#poster1').html(
+                        standardniIspisHeader);
+                    $('#poster').html(
+                        "<h2>You are going to NEED an Umbrella today!</h2> <img src=img/umbrella_on.png alt=\"UMBRELLA NEED\" height=\"300\" width=\"300\"> " +
+                        "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center"
+                    );
+
+                    $('form').hide();
+                    $('#naslov').hide();
+                    $("#poster1").slideToggle("slow");
+                    $("#poster").slideToggle("slow");
+                    $(".back").slideToggle("slow");
+                }
+            })
+
+        } 
+            
+        
     };
 
 
     // SUBMIT TIPKA
     $("#form").submit(function(e) {
-        dohvatiVrijeme();
+        var latitude = $('#lat').text();
+        var longitute = $('#lon').text();
+        dohvatiVrijeme(latitude, longitute);
         e.preventDefault();
     });
     // Ukoliko korisnik stisne Enter umjesto SUBMIT TIPKE
     
 
-    $('#term').keyup(function(e) {
+    $('#searchBox').keyup(function(e) {
         if (e.keyCode === 13) {
             
         $("#form").submit(function(e) {
@@ -123,6 +256,5 @@ $(document).ready(function() {
 
         }
     });
-});
-
 // AUTOCOMPLETE SCRIPT
+
