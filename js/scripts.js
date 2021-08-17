@@ -64,7 +64,7 @@ function loadMapScenario() {
         $('#poster').html(
             "<h2 class='loading'>Checking weather!</h2>"
         );
-        var upit="https://api.openweathermap.org/data/2.5/onecall?lat="+vidi+"&lon="+vidi2+"&units=metric&exclude=current,minutely,hourly&appid=a05dc12322a6edace852c861084872a3"
+        var upit="https://api.openweathermap.org/data/2.5/weather?lat="+vidi+"&lon="+vidi2+"&units=metric&exclude=current,minutely,hourly&appid=a05dc12322a6edace852c861084872a3"
         
         $.getJSON(String(upit),function(json) {
                 if (json.query === null) {
