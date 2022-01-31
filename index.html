@@ -4,7 +4,7 @@
     <meta content="Tomislav Murat" name="author">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">  
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Simple app - Check if you really need to bring your umbrella with you today!">
     <meta name="keywords" content="umbrella app,umbrella-app,weather info, umbrella, do i need umbrella today">
     
@@ -13,6 +13,29 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet">  
+    <!-- Custom CSS -->
+    <style>
+        #tipkic {
+          padding: 20px 50px;
+          font-size: 24px;
+          text-align: center;
+          cursor: pointer;
+          outline: none;
+          color: #fff;
+          background-color: #2F558E;
+          border: none;
+          border-radius: 15px;
+          box-shadow: 0 9px #999;
+        }
+        
+        #tipkic:hover {background-color: #2F558E}
+        
+        #tipkic:active {
+          background-color: #2F558E;
+          box-shadow: 0 5px #666;
+          transform: translateY(4px);
+        }
+    </style>
 
 
     
@@ -51,7 +74,12 @@
             <label for="imegrada">Example: Zagreb, HRV <img alt="location-logo" height="30" src="img/04_maps.png" width="30"></label> 
 
         </p>
-        <p><input id="submit" type="submit" value="CHECK"></p>
+        <center>
+        <button id="tipkic" type="submit"> CHECK </button>
+        <p></p>
+        <br>
+        </center>
+
     </form>
     <section id="poster1"></section>
     <section id="poster"></section>
