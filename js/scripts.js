@@ -37,27 +37,13 @@ function loadMapScenario() {
         // var weatherCity = $('#term2').val();
         
         var vidi=latitude;
-        console.log(vidi);
         var vidi2=longitude;
-        console.log(vidi2);
         var polje = $("#searchBox").val();
-        console.log(polje);
 
         var vrijemeKodovi = ['800', '801', '802', '803', '701', '711',
             '721', '731', '741', '751', '761', '762', '771', '781'
         ];
         var provjera = false;
-        //     console.log(weatherCity);
-        //    console.log(weatherTown);
-
-        //Check if the user has entered anything
-        if (!vidi && !polje) { 
-            //If the input field was empty, display a message
-            $("#poster").show();
-            $('#poster').html(
-                "<h2 class='loading'>Error! Please enter your location in the form</h2>"
-            );
-        } 
         
         if (vidi) {
         //They must have entered a value, carry on with API call, first display a loading message to notify the user of activity
@@ -68,7 +54,6 @@ function loadMapScenario() {
         
         $.getJSON(String(upit),function(json) {
             if (json.query === null) {
-                       console.log(json.query);
                 return $('#poster').append(
                     "<h2>Entered location was not found!</h2>"
                 );
@@ -90,7 +75,6 @@ function loadMapScenario() {
 
                 var lokacija = json.name;
                 
-                console.log(check);
                 var standardniIspisHeader =
                     "<label> Location: " + lokacija +
                     "</label>"+ "<br>" +
@@ -109,7 +93,6 @@ function loadMapScenario() {
             }
             for (i = 0; i < vrijemeKodovi.length; i++) {
                 if (check === vrijemeKodovi[i]) {
-                    console.log("USPJESNO");
                     $('#poster1').html(
                         standardniIspisHeader);
                     $('#poster').html(
@@ -154,13 +137,11 @@ function loadMapScenario() {
             
             $.getJSON(String(upit2),function(json) {
                 if (json.query === null) {
-                           console.log(json.query);
                     return $('#poster').append(
                         "<h2>Entered location was not found!</h2>"
                     );
                 } else {
                     var chec=json.weather[0].main
-                    console.log(chec);
 
                     var provLow = json.weather[0].main;
                     var opis = json.weather[0].description;
@@ -177,7 +158,6 @@ function loadMapScenario() {
                     var lokacija = json.name;
                     var drzava=json.sys.country;
                     
-                    console.log(check);
                     var standardniIspisHeader =
                         "<label> Location: " + lokacija + " ," + drzava +
                         "</label>"+ "<br>" +
@@ -196,7 +176,6 @@ function loadMapScenario() {
                 }
                 for (i = 0; i < vrijemeKodovi.length; i++) {
                     if (check === vrijemeKodovi[i]) {
-                        console.log("USPJESNO");
                         $('#poster1').html(
                             standardniIspisHeader);
                         $('#poster').html(
@@ -238,21 +217,40 @@ function loadMapScenario() {
     // SUBMIT TIPKA
     $("#form").submit(function(e) {
         var latitude = $('#lat').text();
-        var longitute = $('#lon').text();
-        dohvatiVrijeme(latitude, longitute);
-        e.preventDefault();
+        var longitute = $('#lon').text();        
+        if (!latitude && !longitute) { 
+            //If the input field was empty, display a message
+            $("#poster").show();
+            $('#poster').html(
+            "<h2 class='loading'>Error! Please enter your location in the form</h2>"
+                    );
+                e.preventDefault();
+                } else {
+            //    var latitude = $('#lat').text();
+            //    var longitute = $('#lon').text();
+                dohvatiVrijeme(latitude, longitute);
+                e.preventDefault();
+                }
+        
     });
     // Ukoliko korisnik stisne Enter umjesto SUBMIT TIPKE
     
 
     $('#searchBox').keyup(function(e) {
+        var polje = $("#searchBox").val();
         if (e.keyCode === 13) {
-            
-        $("#form").submit(function(e) {
-        dohvatiVrijeme();
-        e.preventDefault();
-    });
-
+            if (!polje) {
+            //If the input field was empty, display a message
+            $("#poster").show();
+            $('#poster').html(
+            "<h2 class='loading'>Error! Please enter your location in the form</h2>");
+            e.preventDefault();
+            } else {
+                $("#form").submit(function(e) {
+                    dohvatiVrijeme();
+                    e.preventDefault();
+                });  
+            }
         }
     });
 // AUTOCOMPLETE SCRIPT
