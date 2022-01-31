@@ -1,3 +1,5 @@
+
+// BING funkcija za autocomplete putem Bing Mapsa
 function loadMapScenario() {
     Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', {
         callback: onLoad,
@@ -19,10 +21,9 @@ function loadMapScenario() {
         'Suggestion: ' + suggestionResult.formattedSuggestion;
         document.getElementById('lat').innerHTML = suggestionResult.location.latitude;
         document.getElementById('lon').innerHTML = suggestionResult.location.longitude;
-
-
     } 
 }
+
 
     $("#poster1").hide();
     $("#poster").hide();
@@ -134,7 +135,6 @@ function loadMapScenario() {
                 "<h2 class='loading'>Checking weather!</h2>"
             );
             var upit2="https://api.openweathermap.org/data/2.5/weather?q="+polje+"&units=metric&exclude=current,minutely,hourly&appid=a05dc12322a6edace852c861084872a3"
-            
             $.getJSON(String(upit2),function(json) {
                 if (json.query === null) {
                     return $('#poster').append(
@@ -165,7 +165,7 @@ function loadMapScenario() {
                         dateTime + "</strong></label>" +
                         "<label> The weather today is going to be: " +
                         "<strong>" + provLow + "</strong>" +
-                        "</label>" +
+                        "</label>"+ "<br>" +
                         "<label> Description: " +
                         "<strong>" + opis + "</strong>" +
                         "</label>" +"<br>" +
@@ -217,8 +217,9 @@ function loadMapScenario() {
     // SUBMIT TIPKA
     $("#form").submit(function(e) {
         var latitude = $('#lat').text();
-        var longitute = $('#lon').text();        
-        if (!latitude && !longitute) { 
+        var longitute = $('#lon').text();
+        var polje = $("#searchBox").val();        
+        if (!latitude && !longitute && !polje) { 
             //If the input field was empty, display a message
             $("#poster").show();
             $('#poster').html(
@@ -233,25 +234,3 @@ function loadMapScenario() {
                 }
         
     });
-    // Ukoliko korisnik stisne Enter umjesto SUBMIT TIPKE
-    
-
-    $('#searchBox').keyup(function(e) {
-        var polje = $("#searchBox").val();
-        if (e.keyCode === 13) {
-            if (!polje) {
-            //If the input field was empty, display a message
-            $("#poster").show();
-            $('#poster').html(
-            "<h2 class='loading'>Error! Please enter your location in the form</h2>");
-            e.preventDefault();
-            } else {
-                $("#form").submit(function(e) {
-                    dohvatiVrijeme();
-                    e.preventDefault();
-                });  
-            }
-        }
-    });
-// AUTOCOMPLETE SCRIPT
-
