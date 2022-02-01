@@ -1,4 +1,3 @@
-
 // BING funkcija za autocomplete putem Bing Mapsa
 function loadMapScenario() {
     Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', {
@@ -25,9 +24,96 @@ function loadMapScenario() {
 }
 
 
+//DATE TIME FUNCTIONS for 1st column
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+}
+
+function formatDate(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+  }
+
+
+
     $("#poster1").hide();
     $("#poster").hide();
+    $("#podaci").hide();
     $(".back").hide();
+
+    //YR NO funkcija
+    var dohvatiYrNo = function(latitude, longitude, lokacija) 
+    {
+    console.log(latitude + " , " + longitude+ " , " + lokacija)
+    var getDays="https://api.met.no/weatherapi/locationforecast/2.0/compact?lat="+latitude+"&lon="+longitude;
+
+     $.getJSON(String(getDays),function(json) {
+        if (json.query === null) {
+            return $('#poster').append(
+                "<h2>Entered location was not found!</h2>");
+            }
+            else {
+                var standardniIspisHeader
+                for (i = 0; i < 24; i++) {
+
+                                      
+                      var d = new Date().addHours(i);
+                      var time = formatDate(d);
+
+                    
+                    //var time = new Date().addHours(i);
+                    //var time = json.properties.timeseries[i].time;
+                    var temp = json.properties.timeseries[i].data.instant.details.air_temperature;
+                    var status = json.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
+                    var precipitation = json.properties.timeseries[i].data.next_1_hours.details.precipitation_amount;
+                    var Slika = status+".svg"
+                    var kisobran = '        '
+
+                    if (precipitation>0) {
+                        kisobran = '<img src=/img/umbrella_need.png'+' alt='+status+' width="30" height="30">'
+                    }
+
+                    var standardniIspisHeader =
+                    "<tr>" + 
+                        "<td>" +
+                            time +
+                        "</td>" +
+                        "<td>" +
+                            status + '<img src=/img/svg/'+Slika+' alt='+status+'width="30" height="30">'  +
+                        "</td>" +
+                        "<td>" +
+                            temp + " C" +
+                        "</td>" +
+                        "<td>" +
+                            precipitation + " mm" + kisobran +
+                        "</td>"+
+                    "</tr>"
+
+                    $('#podaci').append(standardniIspisHeader);
+                }
+                var standardniIspisHeader = "</tbody>" + "</table>";
+                $('form').hide();
+                $('#naslov').hide();
+                $('#poster1').hide();
+                $('#podaci').append(standardniIspisHeader);
+                $("#podaci").slideToggle("slow");
+                $("#poster").append("<center> <b>Prikazuju se podaci za</b> </center>"+ "<strong>"+"<center>" + lokacija + "</center>" + "</strong>");
+                $("#poster").slideToggle("slow");
+                $(".back").show();
+                $('#backbutton').html(
+                    "<center><button onclick="+"window.location.href='index.html'"+">Povratak na pretragu?</button></center"
+                );
+
+            }
+        })
+    }
 
 
 
@@ -219,17 +305,16 @@ function loadMapScenario() {
         var latitude = $('#lat').text();
         var longitute = $('#lon').text();
         var polje = $("#searchBox").val();        
-        if (!latitude && !longitute && !polje) { 
+        if (!latitude || !longitute || !polje) { 
             //If the input field was empty, display a message
-            $("#poster").show();
-            $('#poster').html(
-            "<h2 class='loading'>Error! Please enter your location in the form</h2>"
+            $("#poster1").show();
+            $('#poster1').html(
+            "<h2 class='loading'>Error! Please enter your location using the Bing autocomplete form</h2>"
                     );
                 e.preventDefault();
                 } else {
-            //    var latitude = $('#lat').text();
-            //    var longitute = $('#lon').text();
-                dohvatiVrijeme(latitude, longitute);
+                dohvatiYrNo(latitude, longitute, polje);
+                //dohvatiVrijeme(latitude, longitute);
                 e.preventDefault();
                 }
         

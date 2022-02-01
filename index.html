@@ -15,6 +15,13 @@
     <link href="css/bootstrap.css" rel="stylesheet">  
     <!-- Custom CSS -->
     <style>
+        #wrapper {
+        /* background: #FFFFFF; */
+        padding: 0 46px 10px;
+        margin: 0px auto;
+        width: 940px;
+        }
+        
         #tipkic {
           padding: 20px 50px;
           font-size: 24px;
@@ -35,6 +42,33 @@
           box-shadow: 0 5px #666;
           transform: translateY(4px);
         }
+
+        .grid {
+        background-color: #fff;
+        margin-bottom: 12px;
+        border-collapse: collapse;
+        margin-right: 8px;
+        }
+        .grid td {
+        border: 1px solid #ddd;
+        padding: 3px;
+        }
+
+        .full {
+        width: 940px;
+        }
+
+        table {
+        display: table;
+        border-collapse: separate;
+        box-sizing: border-box;
+        text-indent: initial;
+        border-spacing: 2px;
+        border-color: grey;
+        margin: 20px auto 0;
+        box-shadow: 0 0 1em #222;
+        border-radius: 5px;
+        }
     </style>
 
 
@@ -46,7 +80,8 @@
 
 </head>
 <body>
-    
+
+<div id ='wrapper'>
     <section id="naslov">
         <div>
             <center>
@@ -83,7 +118,21 @@
     </form>
     <section id="poster1"></section>
     <section id="poster"></section>
-    <div class="back" id=backbutton></div>
+    <table id="podaci" class="grid full">
+    <tbody>
+        <tr>
+            <th>Time</th>
+            <th>Status:</th>
+            <th>Temperature:</th>
+            <th>Precipitation Chance</th>
+        </tr>
+
+
+
+
+</div>
+
+<div class="back" id=backbutton></div>
 
 
 
